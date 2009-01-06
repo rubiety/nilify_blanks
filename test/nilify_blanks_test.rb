@@ -1,7 +1,4 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
-require File.join(File.dirname(__FILE__), 'models/post')
-require File.join(File.dirname(__FILE__), 'models/only_post')
-require File.join(File.dirname(__FILE__), 'models/except_post')
 
 class NilifyBlanksTest < Test::Unit::TestCase
   context "Model with nilify_blanks" do
