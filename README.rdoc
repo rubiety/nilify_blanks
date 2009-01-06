@@ -1,0 +1,34 @@
+== Nilify Blanks
+
+In Rails when you use a form and, for text fields, the user does not provide a value, the database field becomes an empty string and not NULL as many would prefer. This plugin allows you to specify a list of attributes (or exceptions from all the attributes) that will be converted to nil if they are blank before a model is saved.  
+
+Only fields who have values that respond to empty? with a value of true will be converted to nil.  Therefore, this does not work with integer fields with the value of 0, for example.  Usage is best shown through examples:
+
+== Basic Examples
+
+  # Checks and converts all fields in the model
+  class Post < ActiveRecord::Base
+    nilify_blanks
+  end
+  
+  # Checks and converts only the title and author fields
+  class Post < ActiveRecord::Base
+    nilify_blanks :only => [:author, :title]
+  end
+  
+  # Checks and converts all fields except for title and author
+  class Post < ActiveRecord::Base
+    nilify_blanks :except => [:author, :title]
+  end
+  
+== Specifying a Callback
+
+Checking uses an ActiveRecord before_save filter by default, but you can specify a different filter with the :before option.  Any filter will work - just first remove the "before_" prefix from the name.
+
+  class Post < ActiveRecord::Base
+    nilify_blanks :before => :create
+  end
+  
+  class Post < ActiveRecord::Before
+    nilify_blanks :before => :validation_on_update
+  end

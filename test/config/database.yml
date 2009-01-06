@@ -1,0 +1,18 @@
+sqlite:
+  :adapter: sqlite
+  :dbfile: nilify_blanks_plugin.sqlite
+sqlite3:
+  :adapter: sqlite3
+  :dbfile: nilify_blanks_plugin.sqlite3
+postgresql:
+  :adapter: postgresql
+  :username: postgres
+  :password: postgres
+  :database: nilify_blanks_plugin_test
+  :min_messages: ERROR
+mysql:
+  :adapter: mysql
+  :host: localhost
+  :username: root
+  :password:
+  :database: nilify_blanks_plugin_test
