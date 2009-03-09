@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{nilify_blanks}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Hughes"]
-  s.date = %q{2009-01-16}
+  s.date = %q{2009-03-09}
   s.description = %q{Auto-convert blank fields to nil.}
   s.email = %q{ben@railsgarden.com}
   s.extra_rdoc_files = ["CHANGELOG", "lib/nilify_blanks.rb", "README.rdoc", "tasks/nilify_blanks_tasks.rake"]
