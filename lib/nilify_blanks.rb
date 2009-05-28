@@ -7,6 +7,8 @@ module Rubiety
     module ClassMethods
       def nilify_blanks(options = {})
         return if self.included_modules.include?(NilifyBlanks::InstanceMethods)
+        return unless self.table_exists?
+        
         include NilifyBlanks::InstanceMethods
         
         if options[:only]
