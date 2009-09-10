@@ -1,0 +1,17 @@
+CHANGELOG
+init.rb
+install.rb
+lib/nilify_blanks.rb
+Manifest
+MIT-LICENSE
+nilify_blanks.gemspec
+nilify_blanks_plugin.sqlite3
+Rakefile
+README.rdoc
+tasks/nilify_blanks_tasks.rake
+test/config/database.yml
+test/nilify_blanks_plugin.sqlite3
+test/nilify_blanks_test.rb
+test/schema.rb
+test/test_helper.rb
+uninstall.rb
