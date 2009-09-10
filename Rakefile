@@ -23,7 +23,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-Echoe.new('nilify_blanks', '0.1.1') do |p|
+Echoe.new('nilify_blanks', '0.1.2') do |p|
   p.description    = "Auto-convert blank fields to nil."
   p.url            = "http://github.com/railsgarden/nilify_blanks"
   p.author         = "Ben Hughes"
