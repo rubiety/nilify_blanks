@@ -1,0 +1,9 @@
+== [2010-10-15] 1.0.0 Major Updates
+
+* Finally updated to be a Gem
+* Internal refactoring
+* Converted tests to RSpec
+* Added support for Rails 3.0
+
+== 0.1.2 Fixed issue with table not existing.
+== 0.1.0 Initial Version

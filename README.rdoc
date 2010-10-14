@@ -6,8 +6,9 @@ Only attributes responding to empty? with a value of true will be converted to n
 
 == Install
 
-  # In environment.rb
-  config.gem 'railsgarden-nilify_blanks', :lib => 'nilify_blanks', :source => 'http://gems.github.com'
+  Include the gem using bundler in your Gemfile:
+
+    gem "nilify_blanks"
 
 == Basic Examples
 
