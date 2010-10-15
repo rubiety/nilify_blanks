@@ -1,4 +1,5 @@
 require "rubygems"
+require "rspec"
 require "nilify_blanks"
 require "active_support"
 require "active_record"

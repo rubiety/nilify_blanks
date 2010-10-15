@@ -1,15 +1,6 @@
-require 'rubygems'
-require 'rake'
-require 'rake/rdoctask'
-require 'spec/rake/spectask'
-
-desc "Run specs"
-Spec::Rake::SpecTask.new do |t|
-  t.spec_files = Rake::FileList["spec/**/*_spec.rb"]
-  t.spec_opts = ["-c"]
-end
-
-task :default => :spec
+require "rubygems"
+require "rake"
+require "rake/rdoctask"
 
 desc "Generate documentation for the plugin."
 Rake::RDocTask.new(:rdoc) do |rdoc|
