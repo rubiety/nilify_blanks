@@ -22,8 +22,11 @@ module NilifyBlanks
       
       cattr_accessor :nilify_blanks_columns
       
-      self.nilify_blanks_columns = self.content_columns.reject {|c| !c.null }.map {|c| c.name.to_s }
-      self.nilify_blanks_columns = self.nilify_blanks_columns.select {|c| options[:only].include?(c) } if options[:only]
+      if options[:only]
+        self.nilify_blanks_columns = options[:only].clone
+      else
+        self.nilify_blanks_columns = self.content_columns.reject {|c| !c.null }.map {|c| c.name.to_s }
+      end
       self.nilify_blanks_columns -= options[:except] if options[:except]
       self.nilify_blanks_columns = self.nilify_blanks_columns.map(&:to_s)
       
