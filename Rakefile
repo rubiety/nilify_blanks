@@ -17,7 +17,8 @@ task :test => :spec
 desc "Clean up files."
 task :clean do |t|
   FileUtils.rm_rf "tmp"
-  Dir.glob("message_block-*.gem").each {|f| FileUtils.rm f }
+  Dir.glob("nilify_blanks-*.gem").each {|f| FileUtils.rm f }
+  Dir.glob("spec/db/*.sqlite3").each {|f| FileUtils.rm f }
 end
 
 desc "Generate documentation for the plugin."
