@@ -35,7 +35,7 @@ describe NilifyBlanks do
   context "Model with nilify_blanks :only => [:first_name, :title]" do
     before(:all) do
       class PostOnlyFirstNameAndTitle < ActiveRecord::Base
-        set_table_name :posts
+        self.table_name = "posts"
         nilify_blanks :only => [:first_name, :title]
       end
       
@@ -61,7 +61,7 @@ describe NilifyBlanks do
   context "Model with nilify_blanks :except => [:first_name, :title]" do
     before(:all) do
       class PostExceptFirstNameAndTitle < ActiveRecord::Base
-        set_table_name :posts
+        self.table_name = "posts"
         nilify_blanks :except => [:first_name, :title]
       end
       
