@@ -1,2 +1,3 @@
 *.sqlite3
 pkg
+*.gem
