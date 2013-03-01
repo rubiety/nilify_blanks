@@ -42,3 +42,9 @@ Checking uses an ActiveRecord before_save filter by default, but you can specify
   class Post < ActiveRecord::Before
     nilify_blanks :before => :validation_on_update
   end
+
+== Running Tests
+
+This gem uses appraisal to test with different versions of the dependencies. See Appraisal first for which versions are tested, then run to test all appraisals:
+
+  $ rake appraisal test
