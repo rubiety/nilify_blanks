@@ -19,6 +19,9 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    appraisal (0.5.1)
+      bundler
+      rake
     arel (3.0.2)
     builder (3.0.4)
     diff-lcs (1.2.1)
@@ -40,6 +43,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  appraisal (~> 0.5.1)
   nilify_blanks!
   rake (~> 10.0.3)
   rspec (~> 2.13)
