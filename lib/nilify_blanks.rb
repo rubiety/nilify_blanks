@@ -4,35 +4,43 @@ module NilifyBlanks
   end
 
   module ClassMethods
+
+    def define_attribute_methods
+      super
+      define_nilify_blank_methods
+    end
+
     def nilify_blanks(options = {})
       return if self.included_modules.include?(NilifyBlanks::InstanceMethods)
-      return unless self.table_exists?
 
       include NilifyBlanks::InstanceMethods
 
-      if options[:only]
-        options[:only] = [options[:only]] unless options[:only].is_a?(Array)
-        options[:only] = options[:only].map(&:to_s)
-      end
+      @_nilify_blanks_options = options
+    end
 
-      if options[:except]
-        options[:except] = [options[:except]] unless options[:except].is_a?(Array)
-        options[:except] = options[:except].map(&:to_s)
-      end
+    private
+
+    def define_nilify_blank_methods
+      return unless @_nilify_blanks_options
+
+      options = @_nilify_blanks_options
+      options[:only] = Array.wrap(options[:only]).map(&:to_s) if options[:only]
+      options[:except] = Array.wrap(options[:except]).map(&:to_s) if options[:except]
 
       cattr_accessor :nilify_blanks_columns
 
       if options[:only]
         self.nilify_blanks_columns = options[:only].clone
       else
-        self.nilify_blanks_columns = self.content_columns.reject {|c| !c.null }.map {|c| c.name.to_s }
+        self.nilify_blanks_columns = self.content_columns.select(&:null).map(&:name).map(&:to_s)
       end
       self.nilify_blanks_columns -= options[:except] if options[:except]
       self.nilify_blanks_columns = self.nilify_blanks_columns.map(&:to_s)
 
       options[:before] ||= :save
-      class_eval "before_#{options[:before]} :nilify_blanks"
+      send("before_#{options[:before]}", :nilify_blanks)
     end
+
   end
 
   module InstanceMethods
