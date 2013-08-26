@@ -1,3 +1,7 @@
+== [2013-08-25] 1.0.2
+
+* Hook on AR::Base.define_attribute_methods in order to prevent eager load of models [byroot]
+
 == [2010-10-15] 1.0.0 Major Updates
 
 * Finally updated to be a Gem
