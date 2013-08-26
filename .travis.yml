@@ -17,6 +17,7 @@ matrix:
     gemfile: gemfiles/4.0.gemfile
 before_install:
 - "gem install bundler"
+- "rm gemfiles/*.lock"
 before_script:
 - "bundle install"
 script: "bundle exec rake clean test"
