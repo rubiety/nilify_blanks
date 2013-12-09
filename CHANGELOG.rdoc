@@ -1,3 +1,7 @@
+== [2013-11-09] 1.0.3
+
+* Add rbx and JRuby compatibility (Thanks, petergoldstein)
+
 == [2013-08-25] 1.0.2
 
 * Hook on AR::Base.define_attribute_methods in order to prevent eager load of models [byroot]
