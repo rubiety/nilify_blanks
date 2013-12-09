@@ -4,7 +4,6 @@ require 'bundler/setup'
 require 'rake'
 require 'appraisal'
 require 'rspec/core/rake_task'
-require 'rdoc/task'
 
 desc 'Default: run unit tests.'
 task :default => [:clean, :test]
@@ -32,13 +31,19 @@ task :clean do |t|
   Dir.glob("spec/db/*.sqlite3").each {|f| FileUtils.rm f }
 end
 
-desc "Generate documentation for the plugin."
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = "rdoc"
-  rdoc.title    = "nilify_blanks"
-  rdoc.options << "--line-numbers" << "--inline-source"
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+begin
+  require 'rdoc/task'
+
+  desc "Generate documentation for the plugin."
+  Rake::RDocTask.new(:rdoc) do |rdoc|
+    rdoc.rdoc_dir = "rdoc"
+    rdoc.title    = "nilify_blanks"
+    rdoc.options << "--line-numbers" << "--inline-source"
+    rdoc.rdoc_files.include('README')
+    rdoc.rdoc_files.include('lib/**/*.rb')
+  end
+rescue LoadError
+  puts 'RDocTask is not supported for this platform'
 end
 
 Dir["#{File.dirname(__FILE__)}/lib/tasks/*.rake"].sort.each { |ext| load ext }
