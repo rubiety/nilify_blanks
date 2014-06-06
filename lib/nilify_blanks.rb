@@ -6,8 +6,9 @@ module NilifyBlanks
   module ClassMethods
 
     def define_attribute_methods
-      super
-      define_nilify_blank_methods
+      if super
+        define_nilify_blank_methods
+      end
     end
 
     def nilify_blanks(options = {})
