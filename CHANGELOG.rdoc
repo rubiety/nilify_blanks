@@ -1,3 +1,7 @@
+== [2013-11-09] 1.0.4
+
+* Fix issues with wrapping define_attribute_methods in jruby on Rails 4 (Thanks, tank157)
+
 == [2013-11-09] 1.0.3
 
 * Add rbx and JRuby compatibility (Thanks, petergoldstein)
