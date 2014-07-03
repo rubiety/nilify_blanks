@@ -45,12 +45,30 @@ Checking uses an ActiveRecord before_save filter by default, but you can specify
 
 == RSpec Matcher
 
-There is a simple rspec matcher to ensure a provided column gets nilified.
+First, include the matchers:
 
   require "nilify_blanks/matchers"
 
+To ensure for a given column:
+
   describe City do
     it { should nilify_blanks_for(:name) }
+  end
+
+To ensure for all applicable content columns:
+
+  describe City do
+    it { should nilify_blanks }
+  end
+
+You can optionally match on options also:
+
+  describe City do
+    it { should nilify_blanks_for(:name, :before => :create) }
+  end
+
+  describe City do
+    it { should nilify_blanks(:before => :create) }
   end
 
 == Running Tests
