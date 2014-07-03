@@ -10,9 +10,9 @@ Only attributes responding to empty? with a value of true will be converted to n
 
 == Install
 
-  Include the gem using bundler in your Gemfile:
+Include the gem using bundler in your Gemfile:
 
-    gem "nilify_blanks"
+  gem "nilify_blanks"
 
 == Basic Examples
 
