@@ -43,6 +43,16 @@ Checking uses an ActiveRecord before_save filter by default, but you can specify
     nilify_blanks :before => :validation_on_update
   end
 
+== RSpec Matcher
+
+There is a simple rspec matcher to ensure a provided column gets nilified.
+
+  require "nilify_blanks/matchers"
+
+  describe City do
+    it { should nilify_blanks_for(:name) }
+  end
+
 == Running Tests
 
 This gem uses appraisal to test with different versions of the dependencies. See Appraisal first for which versions are tested, then run to test all appraisals:
