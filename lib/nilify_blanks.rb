@@ -4,10 +4,16 @@ module NilifyBlanks
   end
 
   module ClassMethods
+    @@define_nilify_blank_methods_lock = Mutex.new
 
+    # This overrides the underlying rails method that defines attribute methods.
+    # This must be thread safe, just like the underlying method.
+    #
     def define_attribute_methods
       if super
-        define_nilify_blank_methods
+        @@define_nilify_blank_methods_lock.synchronize do
+          define_nilify_blank_methods
+        end
       end
     end
 
