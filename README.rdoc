@@ -16,9 +16,14 @@ Include the gem using bundler in your Gemfile:
 
 == Basic Examples
 
-  # Checks and converts all fields in the model
+  # Checks and converts all content fields in the model
   class Post < ActiveRecord::Base
     nilify_blanks
+  end
+
+  # Checks and converts only text fields in the model
+  class Post < ActiveRecord::Base
+    nilify_blanks :types => [:text]
   end
   
   # Checks and converts only the title and author fields

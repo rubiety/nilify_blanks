@@ -4,6 +4,8 @@ module NilifyBlanks
   end
 
   module ClassMethods
+    DEFAULT_TYPES = [:string, :text]
+
     @@define_nilify_blank_methods_lock = Mutex.new
 
     # This overrides the underlying rails method that defines attribute methods.
@@ -31,16 +33,19 @@ module NilifyBlanks
       return unless @_nilify_blanks_options
 
       options = @_nilify_blanks_options
+
       options[:only] = Array.wrap(options[:only]).map(&:to_s) if options[:only]
       options[:except] = Array.wrap(options[:except]).map(&:to_s) if options[:except]
+      options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : DEFAULT_TYPES
 
       cattr_accessor :nilify_blanks_columns
 
       if options[:only]
         self.nilify_blanks_columns = options[:only].clone
       else
-        self.nilify_blanks_columns = self.content_columns.select(&:null).map(&:name).map(&:to_s)
+        self.nilify_blanks_columns = self.content_columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
       end
+
       self.nilify_blanks_columns -= options[:except] if options[:except]
       self.nilify_blanks_columns = self.nilify_blanks_columns.map(&:to_s)
 

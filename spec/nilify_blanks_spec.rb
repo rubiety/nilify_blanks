@@ -12,8 +12,8 @@ describe NilifyBlanks do
       @post.save
     end
     
-    it "should recognize all non-null columns" do
-      ['first_name', 'title', 'summary', 'body', 'views'].should == Post.nilify_blanks_columns
+    it "should recognize all non-null string, text columns" do
+      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body']
     end
     
     it "should convert all blanks to nils" do
@@ -31,6 +31,33 @@ describe NilifyBlanks do
       @post.views.should == 0
     end
   end
+
+  context "Model with nilify_blanks :types => [:text]" do
+    before(:all) do
+      class PostOnlyText < ActiveRecord::Base
+        self.table_name = "posts"
+        nilify_blanks :types => [:text]
+      end
+      
+      @post = PostOnlyText.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+      @post.save
+    end
+    
+    it "should recognize all non-null text only columns" do
+      PostOnlyText.nilify_blanks_columns.should == ['summary', 'body']
+    end
+    
+    it "should convert all blanks to nils" do
+      @post.summary.should be_nil
+      @post.body.should be_nil
+    end
+    
+    it "should leave not-null string fields alone" do
+      @post.first_name.should == ""
+      @post.last_name.should == ""
+      @post.title.should == ""
+    end
+  end
   
   context "Model with nilify_blanks :only => [:first_name, :title]" do
     before(:all) do
@@ -44,7 +71,7 @@ describe NilifyBlanks do
     end
     
     it "should recognize only first_name and title" do
-      ['first_name', 'title'].should == PostOnlyFirstNameAndTitle.nilify_blanks_columns
+      PostOnlyFirstNameAndTitle.nilify_blanks_columns.should == ['first_name', 'title']
     end
     
     it "should convert first_name and title blanks to nils" do
@@ -70,7 +97,7 @@ describe NilifyBlanks do
     end
     
     it "should recognize only summary, body, and views" do
-      ['summary', 'body', 'views'].should == PostExceptFirstNameAndTitle.nilify_blanks_columns
+      PostExceptFirstNameAndTitle.nilify_blanks_columns.should == ['summary', 'body']
     end
     
     it "should convert summary and body blanks to nils" do
