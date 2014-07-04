@@ -1,3 +1,10 @@
+== [2014-07-04] 1.1.0
+
+* Implement new mechanism to allow for global usage at ActiveRecord::Base level (or namespaced base model)
+* Make define_nilify_blanks thread safe
+* New rspec matchers with: require "nilify_blanks/matchers"
+* Only consider string and text columns, and allow types option to configure
+
 == [2013-11-09] 1.0.4
 
 * Fix issues with wrapping define_attribute_methods in jruby on Rails 4 (Thanks, tank157)
