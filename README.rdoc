@@ -14,7 +14,7 @@ Include the gem using bundler in your Gemfile:
 
   gem "nilify_blanks"
 
-== Basic Examples
+== Basic Usage
 
   # Checks and converts all content fields in the model
   class Post < ActiveRecord::Base
@@ -35,7 +35,17 @@ Include the gem using bundler in your Gemfile:
   class Post < ActiveRecord::Base
     nilify_blanks :except => [:author, :title]
   end
-  
+
+== Global Usage
+
+You can also apply nilify_blanks to all models inhering from ActiveRecord::Base:
+
+  ActiveRecord::Base.nilify_blanks
+
+Or perhaps just a model namespace base class:
+
+  Inventory::Base.nilify_blanks
+
 == Specifying a Callback
 
 Checking uses an ActiveRecord before_save filter by default, but you can specify a different filter with the :before option.  Any filter will work - just first remove the "before_" prefix from the name.

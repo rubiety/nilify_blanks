@@ -111,4 +111,69 @@ describe NilifyBlanks do
     end
   end
   
+
+  context "Global Usage" do
+    context "Namespaced Base Class with nilify_blanks inline" do
+      before(:all) do
+        module Admin1
+          class Base < ActiveRecord::Base
+            self.abstract_class = true
+            nilify_blanks
+          end
+        end
+
+        class Admin1::Post < Admin1::Base
+          self.table_name = "posts"
+        end
+
+        @post = Admin1::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post.save
+      end
+
+      it "should convert all blanks to nils" do
+        @post.first_name.should be_nil
+      end
+    end
+
+    context "Namespaced Base Class with nilify_blanks applied after definition" do
+      before(:all) do
+        module Admin2
+          class Base < ActiveRecord::Base
+            self.abstract_class = true
+          end
+        end
+
+        class Admin2::Post < Admin2::Base
+          self.table_name = "posts"
+        end
+
+        Admin2::Base.nilify_blanks
+
+        @post = Admin2::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post.save
+      end
+
+      it "should convert all blanks to nils" do
+        @post.first_name.should be_nil
+      end
+    end
+
+    context "Namespaced Base Class with nilify_blanks applied after definition" do
+      before(:all) do
+        ActiveRecord::Base.nilify_blanks
+
+        class InheritedPost < ActiveRecord::Base
+          self.table_name = "posts"
+        end
+
+        @post = InheritedPost.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post.save
+      end
+
+      it "should convert all blanks to nils" do
+        @post.first_name.should be_nil
+      end
+    end
+
+  end
 end
