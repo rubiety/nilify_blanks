@@ -8,6 +8,13 @@ In Rails when saving a model from a form and values are not provided by the user
 
 Only attributes responding to empty? with a value of true will be converted to nil.  Therefore, this does not work with integer fields with the value of 0, for example.  Usage is best shown through examples:
 
+== Requirements
+
+Rails 3.0 or later is required (ActiveRecord implementation is very different in Rails 2 and not easy to support both).
+
+Due to issues maintaining backwards compatibility, as of v1.2.0 this gem requires ruby 1.9.3 or higher. 
+If you are still using 1.8.7 or 1.9.2, please use the v1.1.0 release.
+
 == Install
 
 Include the gem using bundler in your Gemfile:
