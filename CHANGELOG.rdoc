@@ -1,3 +1,9 @@
+== [2014-07-04] 1.2.0
+
+* Drop support for ruby 1.8.7 and 1.9.2 - too many issues with backwards-compatibility
+* Explicit support for Rails 4.1 and 4.2
+* Up-to-date Appraisals and dependencies
+
 == [2014-07-04] 1.1.0
 
 * Implement new mechanism to allow for global usage at ActiveRecord::Base level (or namespaced base model)
