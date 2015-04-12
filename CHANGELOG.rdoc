@@ -1,3 +1,7 @@
+== [2015-04-12] 1.2.1
+
+* Fix inconsistency in nilify_blanks RSpec matcher: should filter by type
+
 == [2014-07-04] 1.2.0
 
 * Drop support for ruby 1.8.7 and 1.9.2 - too many issues with backwards-compatibility
