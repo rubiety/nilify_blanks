@@ -5,6 +5,7 @@ require "nilify_blanks/version"
 Gem::Specification.new do |s|
   s.name        = "nilify_blanks"
   s.version     = NilifyBlanks::VERSION
+  s.license     = 'MIT'
   s.author      = "Ben Hughes"
   s.email       = "ben@railsgarden.com"
   s.homepage    = "http://github.com/rubiety/nilify_blanks"
