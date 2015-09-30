@@ -45,7 +45,7 @@ Include the gem using bundler in your Gemfile:
 
 == Global Usage
 
-You can also apply nilify_blanks to all models inhering from ActiveRecord::Base:
+You can also apply nilify_blanks to all models inheriting from ActiveRecord::Base:
 
   ActiveRecord::Base.nilify_blanks
 
