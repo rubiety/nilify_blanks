@@ -4,7 +4,9 @@
 
 == Nilify Blanks
 
-In Rails when saving a model from a form and values are not provided by the user, an empty string is recorded to the database instead of a NULL as many would prefer (mixing blanks and NULLs can become confusing).  This plugin allows you to specify a list of attributes (or exceptions from all the attributes) that will be converted to nil if they are blank before a model is saved.  
+In Rails when saving a model from a form and values are not provided by the user, an empty string is recorded to the database instead of a NULL as many would prefer (mixing blanks and NULLs can become confusing).  This plugin allows you to specify a list of attributes (or exceptions from all the attributes) that will be converted to nil if they are blank before a model is saved.
+
+By default, columns set as NOT NULL will not be nilified, since that value cannot be persisted, and it might be better to catch that with a validation. If you want to nilify those columns anyway, you can use `only:` (see below) to explicitly mention them.
 
 Only attributes responding to blank? with a value of true will be converted to nil.  Therefore, this does not work with integer fields with the value of 0, for example.  Usage is best shown through examples:
 
