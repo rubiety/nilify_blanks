@@ -6,6 +6,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :title
     t.text :summary
     t.text :body
+    t.column :slug, :citext
     t.integer :views
   end
   
