@@ -4,7 +4,7 @@ module NilifyBlanks
   end
 
   module ClassMethods
-    DEFAULT_TYPES = [:string, :text]
+    DEFAULT_TYPES = [:string, :text, :citext]
 
     @@define_nilify_blank_methods_lock = Mutex.new
 

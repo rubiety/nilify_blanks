@@ -8,12 +8,12 @@ describe NilifyBlanks do
         nilify_blanks
       end
       
-      @post = Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+      @post = Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
       @post.save
     end
     
-    it "should recognize all non-null string, text columns" do
-      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body']
+    it "should recognize all non-null string, text, citext columns" do
+      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body', 'slug']
     end
     
     it "should convert all blanks to nils" do
@@ -21,6 +21,7 @@ describe NilifyBlanks do
       @post.title.should be_nil
       @post.summary.should be_nil
       @post.body.should be_nil
+      @post.slug.should be_nil
     end
     
     it "should leave not-null last name field alone" do
@@ -33,29 +34,37 @@ describe NilifyBlanks do
   end
 
   context "Model with nilify_blanks :types => [:text]" do
+    def citext_supported
+      PostOnlyText.content_columns.detect {|c| c.type == :citext}
+    end
+
     before(:all) do
       class PostOnlyText < ActiveRecord::Base
         self.table_name = "posts"
         nilify_blanks :types => [:text]
       end
       
-      @post = PostOnlyText.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+      @post = PostOnlyText.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
       @post.save
     end
     
     it "should recognize all non-null text only columns" do
-      PostOnlyText.nilify_blanks_columns.should == ['summary', 'body']
+      expected_types = ['summary', 'body']
+      expected_types << 'slug' unless citext_supported
+      PostOnlyText.nilify_blanks_columns.should == expected_types
     end
     
     it "should convert all blanks to nils" do
       @post.summary.should be_nil
       @post.body.should be_nil
+      @post.slug.should be_nil unless citext_supported
     end
     
     it "should leave not-null string fields alone" do
       @post.first_name.should == ""
       @post.last_name.should == ""
       @post.title.should == ""
+      @post.slug.should == "" if citext_supported
     end
   end
   
@@ -66,7 +75,7 @@ describe NilifyBlanks do
         nilify_blanks :only => [:first_name, :title]
       end
       
-      @post = PostOnlyFirstNameAndTitle.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+      @post = PostOnlyFirstNameAndTitle.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
       @post.save
     end
     
@@ -82,6 +91,7 @@ describe NilifyBlanks do
     it "should leave other fields alone" do
       @post.summary.should == ""
       @post.body.should == ""
+      @post.slug.should == ""
     end
   end
   
@@ -92,17 +102,18 @@ describe NilifyBlanks do
         nilify_blanks :except => [:first_name, :title]
       end
       
-      @post = PostExceptFirstNameAndTitle.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+      @post = PostExceptFirstNameAndTitle.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
       @post.save
     end
     
     it "should recognize only summary, body, and views" do
-      PostExceptFirstNameAndTitle.nilify_blanks_columns.should == ['summary', 'body']
+      PostExceptFirstNameAndTitle.nilify_blanks_columns.should == ['summary', 'body', 'slug']
     end
     
     it "should convert summary and body blanks to nils" do
       @post.summary.should be_nil
       @post.body.should be_nil
+      @post.slug.should be_nil
     end
     
     it "should leave other fields alone" do
@@ -126,7 +137,7 @@ describe NilifyBlanks do
           self.table_name = "posts"
         end
 
-        @post = Admin1::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post = Admin1::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
         @post.save
       end
 
@@ -149,7 +160,7 @@ describe NilifyBlanks do
 
         Admin2::Base.nilify_blanks
 
-        @post = Admin2::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post = Admin2::Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
         @post.save
       end
 
@@ -166,7 +177,7 @@ describe NilifyBlanks do
           self.table_name = "posts"
         end
 
-        @post = InheritedPost.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :views => 0)
+        @post = InheritedPost.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
         @post.save
       end
 
