@@ -34,6 +34,21 @@ describe NilifyBlanks do
     end
   end
 
+  context "Model with nilify_blanks :nullables_only => false" do
+    before(:all) do
+      class PostWithNullables < ActiveRecord::Base
+        self.table_name = "posts"
+        nilify_blanks :nullables_only => false
+      end
+
+      @post = PostWithNullables.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0, :blog_id => '')
+    end
+
+    it "should recognize all (even null) string, text, citext columns" do
+      PostWithNullables.nilify_blanks_columns.should == ['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id']
+    end
+  end
+
   context "Model with nilify_blanks :types => [:text]" do
     def citext_supported
       PostOnlyText.content_columns.detect {|c| c.type == :citext}
