@@ -65,7 +65,7 @@ module NilifyBlanks
         if options[:only]
           self.nilify_blanks_columns = options[:only].clone
         else
-          self.nilify_blanks_columns = self.content_columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
+          self.nilify_blanks_columns = self.columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
         end
 
         self.nilify_blanks_columns -= options[:except] if options[:except]
