@@ -13,11 +13,7 @@ describe NilifyBlanks do
     end
 
     it "should recognize all non-null string, text, citext columns" do
-      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body', 'slug']
-    end
-
-    it "should recognize all non-null string, text columns" do
-      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body', 'blog_id']
+      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body', 'slug', 'blog_id']
     end
 
     it "should convert all blanks to nils" do
