@@ -84,8 +84,12 @@ module NilifyBlanks
     def nilify_blanks
       (self.nilify_blanks_columns || []).each do |column|
         value = read_attribute(column)
-        next unless value.is_a?(String)
+        next unless value.is_a?(String) || value.is_a?(Array)
         next unless value.respond_to?(:blank?)
+        if value.is_a?(Array) # for pg array
+          value.reject!(&:blank?)
+          write_attribute(column, []) and next if value.blank?
+        end
 
         write_attribute(column, nil) if value.blank?
       end
