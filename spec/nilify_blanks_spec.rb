@@ -1,7 +1,6 @@
 require "spec_helper"
 
-describe NilifyBlanks do
-
+RSpec.describe NilifyBlanks do
   context "Model with nilify_blanks" do
     before(:all) do
       class Post < ActiveRecord::Base
@@ -13,24 +12,24 @@ describe NilifyBlanks do
     end
 
     it "should recognize all non-null string, text, citext columns" do
-      Post.nilify_blanks_columns.should == ['first_name', 'title', 'summary', 'body', 'slug', 'blog_id']
+      expect(Post.nilify_blanks_columns).to eq(['first_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
     end
 
     it "should convert all blanks to nils" do
-      @post.first_name.should be_nil
-      @post.title.should be_nil
-      @post.summary.should be_nil
-      @post.body.should be_nil
-      @post.slug.should be_nil
-      @post.blog_id.should be_nil
+      expect(@post.first_name).to be_nil
+      expect(@post.title).to be_nil
+      expect(@post.summary).to be_nil
+      expect(@post.body).to be_nil
+      expect(@post.slug).to be_nil
+      expect(@post.blog_id).to be_nil
     end
 
     it "should leave not-null last name field alone" do
-      @post.last_name.should == ""
+      expect(@post.last_name).to eq("")
     end
 
     it "should leave integer views field alone" do
-      @post.views.should == 0
+      expect(@post.views).to eq(0)
     end
   end
 
@@ -45,7 +44,7 @@ describe NilifyBlanks do
     end
 
     it "should recognize all (even null) string, text, citext columns" do
-      PostWithNullables.nilify_blanks_columns.should == ['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id']
+      expect(PostWithNullables.nilify_blanks_columns).to eq(['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
     end
   end
 
@@ -67,20 +66,20 @@ describe NilifyBlanks do
     it "should recognize all non-null text only columns" do
       expected_types = ['summary', 'body']
       expected_types << 'slug' unless citext_supported
-      PostOnlyText.nilify_blanks_columns.should == expected_types
+      expect(PostOnlyText.nilify_blanks_columns).to eq(expected_types)
     end
 
     it "should convert all blanks to nils" do
-      @post.summary.should be_nil
-      @post.body.should be_nil
-      @post.slug.should be_nil unless citext_supported
+      expect(@post.summary).to be_nil
+      expect(@post.body).to be_nil
+      expect(@post.slug).to be_nil unless citext_supported
     end
 
     it "should leave not-null string fields alone" do
-      @post.first_name.should == ""
-      @post.last_name.should == ""
-      @post.title.should == ""
-      @post.slug.should == "" if citext_supported
+      expect(@post.first_name).to eq("")
+      expect(@post.last_name).to eq("")
+      expect(@post.title).to eq("")
+      expect(@post.slug).to eq("") if citext_supported
     end
   end
 
@@ -96,18 +95,18 @@ describe NilifyBlanks do
     end
 
     it "should recognize only first_name and title" do
-      PostOnlyFirstNameAndTitle.nilify_blanks_columns.should == ['first_name', 'title']
+      expect(PostOnlyFirstNameAndTitle.nilify_blanks_columns).to eq(['first_name', 'title'])
     end
 
     it "should convert first_name and title blanks to nils" do
-      @post.first_name.should be_nil
-      @post.title.should be_nil
+      expect(@post.first_name).to be_nil
+      expect(@post.title).to be_nil
     end
 
     it "should leave other fields alone" do
-      @post.summary.should == ""
-      @post.body.should == ""
-      @post.slug.should == ""
+      expect(@post.summary).to eq("")
+      expect(@post.body).to eq("")
+      expect(@post.slug).to eq("")
     end
   end
 
@@ -123,18 +122,18 @@ describe NilifyBlanks do
     end
 
     it "should recognize only summary, body, and views" do
-      PostExceptFirstNameAndTitle.nilify_blanks_columns.should == ['summary', 'body', 'slug']
+      expect(PostExceptFirstNameAndTitle.nilify_blanks_columns).to eq(['summary', 'body', 'slug'])
     end
 
     it "should convert summary and body blanks to nils" do
-      @post.summary.should be_nil
-      @post.body.should be_nil
-      @post.slug.should be_nil
+      expect(@post.summary).to be_nil
+      expect(@post.body).to be_nil
+      expect(@post.slug).to be_nil
     end
 
     it "should leave other fields alone" do
-      @post.first_name.should == ""
-      @post.title.should == ""
+      expect(@post.first_name).to eq("")
+      expect(@post.title).to eq("")
     end
   end
 
@@ -158,7 +157,7 @@ describe NilifyBlanks do
       end
 
       it "should convert all blanks to nils" do
-        @post.first_name.should be_nil
+        expect(@post.first_name).to be_nil
       end
     end
 
@@ -181,7 +180,7 @@ describe NilifyBlanks do
       end
 
       it "should convert all blanks to nils" do
-        @post.first_name.should be_nil
+        expect(@post.first_name).to be_nil
       end
     end
 
@@ -198,7 +197,7 @@ describe NilifyBlanks do
       end
 
       it "should convert all blanks to nils" do
-        @post.first_name.should be_nil
+        expect(@post.first_name).to be_nil
       end
     end
 
