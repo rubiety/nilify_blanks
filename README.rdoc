@@ -68,7 +68,7 @@ Checking uses an ActiveRecord before_save filter by default, but you can specify
     nilify_blanks :before => :create
   end
   
-  class Post < ActiveRecord::Before
+  class Post < ActiveRecord::Base
     nilify_blanks :before => :validation_on_update
   end
 
