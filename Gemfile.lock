@@ -30,7 +30,7 @@ GEM
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     minitest (5.11.3)
-    rake (10.0.4)
+    rake (13.0.1)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -259,7 +259,7 @@ DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
   appraisal (>= 1.0.2)
   nilify_blanks!
-  rake (~> 10.0.3)
+  rake (~> 13.0.1)
   rspec (>= 3.8.0)
   rubysl (~> 2.0)
   sqlite3
