@@ -1,17 +1,37 @@
-require 'rubygems'
+require 'bundler/gem_tasks'
+require 'appraisal'
+require 'rspec/core/rake_task'
+
 require 'bundler/setup'
 
 require 'rake'
 require 'rspec/core/rake_task'
 
-desc 'Default: run unit tests.'
-task :default => [:clean, :test]
+desc "Default: run unit tests."
+task default: [:clean, :all]
 
-desc "Run Specs"
-RSpec::Core::RakeTask.new(:spec) do |t|
+task test: :spec
+
+desc "Test this plugin under all supported Rails versions."
+task :all do |t|
+  if ENV['BUNDLE_GEMFILE']
+    exec('rake spec && cucumber')
+  else
+    exec("rm -f gemfiles/*.lock")
+    Rake::Task["appraisal:gemfiles"].execute
+    Rake::Task["appraisal:install"].execute
+    exec('rake appraisal')
+  end
 end
 
-task :test => :spec
+desc "Run Specs"
+RSpec::Core::RakeTask.new(:spec)
+
+desc "Start an IRB session within this plugin"
+task :shell do |t|
+  chdir File.dirname(__FILE__)
+  exec 'irb -I lib/ -I lib/paperclip -r rubygems -r active_record -r tempfile -r init'
+end
 
 desc "Clean up files."
 task :clean do |t|
@@ -19,21 +39,3 @@ task :clean do |t|
   Dir.glob("nilify_blanks-*.gem").each {|f| FileUtils.rm f }
   Dir.glob("spec/db/*.sqlite3").each {|f| FileUtils.rm f }
 end
-
-begin
-  require 'rdoc/task'
-
-  desc "Generate documentation for the plugin."
-  Rake::RDocTask.new(:rdoc) do |rdoc|
-    rdoc.rdoc_dir = "rdoc"
-    rdoc.title    = "nilify_blanks"
-    rdoc.options << "--line-numbers" << "--inline-source"
-    rdoc.rdoc_files.include('README')
-    rdoc.rdoc_files.include('lib/**/*.rb')
-  end
-rescue LoadError
-  puts 'RDocTask is not supported for this platform'
-end
-
-Dir["#{File.dirname(__FILE__)}/lib/tasks/*.rake"].sort.each { |ext| load ext }
-
