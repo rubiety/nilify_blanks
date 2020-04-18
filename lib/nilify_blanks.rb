@@ -51,9 +51,11 @@ module NilifyBlanks
 
     def define_nilify_blank_methods
       return unless @_nilify_blanks_options
-      return if @nilify_blank_methods_generated
+      return if @nilify_blanks_methods_generated
 
       @@define_nilify_blank_methods_lock.synchronize do
+        return if @nilify_blanks_methods_generated
+
         options = @_nilify_blanks_options
 
         options[:only] = Array.wrap(options[:only]).map(&:to_s) if options[:only]
