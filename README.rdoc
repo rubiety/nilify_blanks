@@ -12,10 +12,7 @@ Only attributes responding to blank? with a value of true will be converted to n
 
 == Requirements
 
-Rails 3.0 or later is required (ActiveRecord implementation is very different in Rails 2 and not easy to support both).
-
-Due to issues maintaining backwards compatibility, as of v1.2.0 this gem requires ruby 1.9.3 or higher. 
-If you are still using 1.8.7 or 1.9.2, please use the v1.1.0 release.
+As of v1.4.0, this gem requires Rails 4 and Ruby 2.2 or higher.
 
 == Install
 
@@ -32,22 +29,22 @@ Include the gem using bundler in your Gemfile:
 
   # Checks and converts only text fields in the model
   class Post < ActiveRecord::Base
-    nilify_blanks :types => [:text]
+    nilify_blanks types: [:text]
   end
-  
+
   # Checks and converts only the title and author fields
   class Post < ActiveRecord::Base
-    nilify_blanks :only => [:author, :title]
+    nilify_blanks only: [:author, :title]
   end
-  
+
   # Checks and converts all fields except for title and author
   class Post < ActiveRecord::Base
-    nilify_blanks :except => [:author, :title]
+    nilify_blanks except: [:author, :title]
   end
 
   # Checks and converts any fields, regardless of thier null constraint
   class Post < ActiveRecord::Base
-    nilify_blanks :nullables_only => false
+    nilify_blanks nullables_only: false
   end
 
 == Global Usage
@@ -65,11 +62,11 @@ Or perhaps just a model namespace base class:
 Checking uses an ActiveRecord before_save filter by default, but you can specify a different filter with the :before option.  Any filter will work - just first remove the "before_" prefix from the name.
 
   class Post < ActiveRecord::Base
-    nilify_blanks :before => :create
+    nilify_blanks before: :create
   end
-  
+
   class Post < ActiveRecord::Base
-    nilify_blanks :before => :validation_on_update
+    nilify_blanks before: :validation_on_update
   end
 
 == RSpec Matcher
@@ -93,15 +90,16 @@ To ensure for all applicable content columns:
 You can optionally match on options also:
 
   describe City do
-    it { should nilify_blanks_for(:name, :before => :create) }
+    it { should nilify_blanks_for(:name, before: :create) }
   end
 
   describe City do
-    it { should nilify_blanks(:before => :create) }
+    it { should nilify_blanks(before: :create) }
   end
 
 == Running Tests
 
 This gem uses appraisal to test with different versions of the dependencies. See Appraisal first for which versions are tested, then run to test all appraisals:
 
+  $ rake appraisal install
   $ rake appraisal test
