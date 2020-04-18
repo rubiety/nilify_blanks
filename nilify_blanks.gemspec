@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.rubyforge_project = s.name
   s.required_rubygems_version = ">= 1.3.4"
 
-  s.add_dependency("activesupport", [">= 3.0.0"])
-  s.add_dependency("activerecord", [">= 3.0.0"])
+  s.add_dependency("activesupport", [">= 4.0.0"])
+  s.add_dependency("activerecord", [">= 4.0.0"])
   s.add_development_dependency("rake", "~> 13.0.1")
   s.add_development_dependency("rspec", [">= 3.8.0"])
   s.add_development_dependency("appraisal", [">= 1.0.2"])
