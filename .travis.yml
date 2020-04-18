@@ -1,9 +1,6 @@
 sudo: false
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.10
   - 2.2.10
   - 2.3.8
   - 2.4.5
@@ -11,26 +8,11 @@ rvm:
   - 2.6.1
 
 gemfile:
-  - gemfiles/3.0.gemfile
-  - gemfiles/3.1.gemfile
-  - gemfiles/3.2.gemfile
   - gemfiles/4.0.gemfile
   - gemfiles/4.1.gemfile
   - gemfiles/4.2.gemfile
   - gemfiles/5.2.gemfile
-
-matrix:
-  exclude:
-  - rvm: 1.9.3
-    gemfile: gemfiles/5.2.gemfile
-  - rvm: 2.0.0
-    gemfile: gemfiles/5.2.gemfile
-  - rvm: 2.1.10
-    gemfile: gemfiles/5.2.gemfile
-  - rvm: 2.5.3
-    gemfile: gemfiles/3.0.gemfile
-  - rvm: 2.6.1
-    gemfile: gemfiles/3.0.gemfile
+  - gemfiles/6.0.gemfile
 
 before_install:
   - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
