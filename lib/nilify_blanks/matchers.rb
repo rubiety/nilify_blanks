@@ -43,7 +43,7 @@ Kernel.const_get(rspec_module)::Matchers.define :nilify_blanks do |options = {}|
     model_class.define_attribute_methods
     model_class.included_modules.include?(NilifyBlanks::InstanceMethods) &&
     model_class.respond_to?(:nilify_blanks_columns) &&
-    model_class.nilify_blanks_columns == model_class.content_columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s) &&
+    model_class.nilify_blanks_columns == model_class.columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s) &&
     options.all? {|k, v| model_class.instance_variable_get(:@_nilify_blanks_options)[k] == v }
   end
 

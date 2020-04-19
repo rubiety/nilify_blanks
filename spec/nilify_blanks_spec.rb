@@ -1,4 +1,4 @@
-require "spec_helper"
+require "nilify_blanks/matchers"
 
 RSpec.describe NilifyBlanks do
   context "Model with nilify_blanks" do
@@ -30,6 +30,10 @@ RSpec.describe NilifyBlanks do
 
     it "should leave integer views field alone" do
       expect(@post.views).to eq(0)
+    end
+
+    it "should not nilify non-null column" do
+      expect(@post.class.nilify_blanks_columns).to_not include('last_name')
     end
   end
 
@@ -201,5 +205,41 @@ RSpec.describe NilifyBlanks do
       end
     end
 
+  end
+
+  describe "matchers" do
+    describe "nilify_blanks_for" do
+      subject { Post.new }
+
+      before(:all) do
+        class Post < ActiveRecord::Base
+          nilify_blanks
+        end
+      end
+
+      it { is_expected.to nilify_blanks_for(:first_name) }
+      it { is_expected.to nilify_blanks_for(:title) }
+      it { is_expected.to nilify_blanks_for(:summary) }
+      it { is_expected.to nilify_blanks_for(:body) }
+      it { is_expected.to nilify_blanks_for(:slug) }
+      it { is_expected.to nilify_blanks_for(:blog_id) }
+
+      it { is_expected.to_not nilify_blanks_for(:id) }
+      it { is_expected.to_not nilify_blanks_for(:last_name) }
+    end
+
+    describe "nilify_blanks" do
+      subject { Post.new }
+
+      before(:all) do
+        class Post < ActiveRecord::Base
+          nilify_blanks
+        end
+      end
+
+      context "foreign key column is nilified" do
+        it { is_expected.to nilify_blanks }
+      end
+    end
   end
 end
