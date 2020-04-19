@@ -3,6 +3,10 @@ require "active_support/concern"
 module NilifyBlanks
   extend ActiveSupport::Concern
 
+  included do
+    class_attribute :nilify_blanks_columns, instance_writer: false, default: []
+  end
+
   module ClassMethods
     DEFAULT_TYPES = [:string, :text, :citext]
 
@@ -58,8 +62,6 @@ module NilifyBlanks
         options[:except] = Array.wrap(options[:except]).map(&:to_s) if options[:except]
         options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : DEFAULT_TYPES
 
-        cattr_accessor :nilify_blanks_columns
-
         if options[:only]
           self.nilify_blanks_columns = options[:only].clone
         elsif options[:nullables_only] == false
@@ -79,7 +81,7 @@ module NilifyBlanks
   end
 
   def nilify_blanks
-    (self.nilify_blanks_columns || []).each do |column|
+    (nilify_blanks_columns || []).each do |column|
       value = read_attribute(column)
       next unless value.is_a?(String)
       next unless value.respond_to?(:blank?)
