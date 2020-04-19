@@ -23,7 +23,7 @@ Kernel.const_get(rspec_module)::Matchers.define :nilify_blanks_for do |column_na
     model_class.included_modules.include?(NilifyBlanks) &&
     model_class.respond_to?(:nilify_blanks_columns) &&
     model_class.nilify_blanks_columns.include?(column_name.to_s) &&
-    options.all? {|k, v| model_class.instance_variable_get(:@_nilify_blanks_options)[k] == v }
+    (options || {}).all? {|k, v| model_class.nilify_blanks_options[k] == v }
   end
 
   send(failure_message_method) do |_|
@@ -37,14 +37,14 @@ end
 
 Kernel.const_get(rspec_module)::Matchers.define :nilify_blanks do |options = {}|
   match do |model_instance|
-    options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : NilifyBlanks::ClassMethods::DEFAULT_TYPES
+    expected_types = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : NilifyBlanks::ClassMethods::DEFAULT_TYPES
 
     model_class = model_instance.class
     model_class.define_attribute_methods
     model_class.included_modules.include?(NilifyBlanks) &&
     model_class.respond_to?(:nilify_blanks_columns) &&
-    model_class.nilify_blanks_columns == model_class.columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s) &&
-    options.all? {|k, v| model_class.instance_variable_get(:@_nilify_blanks_options)[k] == v }
+    model_class.nilify_blanks_columns == model_class.columns.select(&:null).select {|c| expected_types.include?(c.type) }.map(&:name).map(&:to_s) &&
+    (options || {}).all? {|k, v| model_class.nilify_blanks_options[k] == v }
   end
 
   send(failure_message_method) do |_|

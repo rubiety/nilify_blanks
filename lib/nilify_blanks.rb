@@ -5,6 +5,7 @@ module NilifyBlanks
 
   included do
     class_attribute :nilify_blanks_columns, instance_writer: false, default: []
+    class_attribute :nilify_blanks_options, instance_writer: false, default: nil
   end
 
   module ClassMethods
@@ -21,43 +22,23 @@ module NilifyBlanks
       end
     end
 
-    def inherited(child_class)
-      if instance_variable_get(:@_nilify_blanks_options) and !child_class.instance_variable_get(:@_nilify_blanks_options)
-        child_class.nilify_blanks @_nilify_blanks_options
-      end
-
-      super
-    end
-
     def nilify_blanks(options = {})
-      return if @_nilify_blanks_options
-
-      @_nilify_blanks_options = options
+      self.nilify_blanks_options = options
 
       # Normally we wait for rails to define attribute methods, but we could be calling this after this has already been done.
       # If so, let's just immediately generate nilify blanks methods.
       #
-      if @attribute_methods_generated
-        define_nilify_blank_methods
-      end
-
-      descendants.each do |subclass|
-        subclass.nilify_blanks @_nilify_blanks_options
-      end
+      define_nilify_blank_methods if @attribute_methods_generated
     end
 
 
     private
 
     def define_nilify_blank_methods
-      return unless @_nilify_blanks_options
-      return if @nilify_blanks_methods_generated
+      return unless nilify_blanks_options
 
       @@define_nilify_blank_methods_lock.synchronize do
-        return if @nilify_blanks_methods_generated
-
-        options = @_nilify_blanks_options
-
+        options = nilify_blanks_options.dup
         options[:only] = Array.wrap(options[:only]).map(&:to_s) if options[:only]
         options[:except] = Array.wrap(options[:except]).map(&:to_s) if options[:except]
         options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : DEFAULT_TYPES
@@ -75,7 +56,6 @@ module NilifyBlanks
 
         options[:before] ||= :save
         send("before_#{options[:before]}", :nilify_blanks)
-        @nilify_blanks_methods_generated = true
       end
     end
   end
