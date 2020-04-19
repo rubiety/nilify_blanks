@@ -40,7 +40,7 @@ Include the gem using bundler in your Gemfile:
     nilify_blanks except: [:author, :title]
   end
 
-  # Checks and converts any fields, regardless of thier null constraint
+  # Checks and converts any fields, regardless of their null constraint
   class Post < ActiveRecord::Base
     nilify_blanks nullables_only: false
   end
