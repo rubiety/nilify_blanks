@@ -10,6 +10,13 @@ gemfile:
   - gemfiles/4.1.gemfile
   - gemfiles/4.2.gemfile
   - gemfiles/5.2.gemfile
+  - gemfiles/6.0.gemfile
+
+matrix:
+  fast_finish: true
+  exclude:
+    - gemfile: gemfiles/6.0.gemfile
+      rvm: 2.4.5
 
 before_install:
   - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
