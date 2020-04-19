@@ -1,7 +1,7 @@
+require "active_support/concern"
+
 module NilifyBlanks
-  def self.included(base)
-    base.extend ClassMethods
-  end
+  extend ActiveSupport::Concern
 
   module ClassMethods
     DEFAULT_TYPES = [:string, :text, :citext]
@@ -27,10 +27,6 @@ module NilifyBlanks
 
     def nilify_blanks(options = {})
       return if @_nilify_blanks_options
-
-      unless included_modules.include?(NilifyBlanks::InstanceMethods)
-        include NilifyBlanks::InstanceMethods
-      end
 
       @_nilify_blanks_options = options
 
@@ -82,15 +78,13 @@ module NilifyBlanks
     end
   end
 
-  module InstanceMethods
-    def nilify_blanks
-      (self.nilify_blanks_columns || []).each do |column|
-        value = read_attribute(column)
-        next unless value.is_a?(String)
-        next unless value.respond_to?(:blank?)
+  def nilify_blanks
+    (self.nilify_blanks_columns || []).each do |column|
+      value = read_attribute(column)
+      next unless value.is_a?(String)
+      next unless value.respond_to?(:blank?)
 
-        write_attribute(column, nil) if value.blank?
-      end
+      write_attribute(column, nil) if value.blank?
     end
   end
 end
