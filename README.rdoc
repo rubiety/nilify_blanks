@@ -1,6 +1,4 @@
 {<img src="https://secure.travis-ci.org/rubiety/nilify_blanks.png?branch=master" alt="Build Status" />}[http://travis-ci.org/rubiety/nilify_blanks]
-{<img src="https://gemnasium.com/rubiety/nilify_blanks.png" alt="Dependency Status" />}[https://gemnasium.com/rubiety/nilify_blanks]
-{<img src="https://codeclimate.com/github/rubiety/nilify_blanks.png" />}[https://codeclimate.com/github/rubiety/nilify_blanks]
 
 == Nilify Blanks
 
