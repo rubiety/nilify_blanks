@@ -205,6 +205,25 @@ RSpec.describe NilifyBlanks do
       end
     end
 
+    context "Namespaced Base Class with nilify_blanks with overrides applied after definition" do
+      before(:all) do
+        ActiveRecord::Base.nilify_blanks
+
+        class InheritedPost < ActiveRecord::Base
+          self.table_name = "posts"
+
+          nilify_blanks except: [:first_name]
+        end
+
+        @post = InheritedPost.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
+        @post.save
+      end
+
+      it "should convert all blanks to nils" do
+        expect(@post.first_name).to_not be_nil
+        expect(@post.title).to be_nil
+      end
+    end
   end
 
   describe "matchers" do

@@ -47,15 +47,16 @@ module NilifyBlanks
         options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : DEFAULT_TYPES
 
         if options[:only]
-          self.nilify_blanks_columns = options[:only].clone
+          columns_to_nilify = options[:only].clone
         elsif options[:nullables_only] == false
-          self.nilify_blanks_columns = self.columns.select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
+          columns_to_nilify = self.columns.select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
         else
-          self.nilify_blanks_columns = self.columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
+          columns_to_nilify = self.columns.select(&:null).select {|c| options[:types].include?(c.type) }.map(&:name).map(&:to_s)
         end
 
-        self.nilify_blanks_columns -= options[:except] if options[:except]
-        self.nilify_blanks_columns = self.nilify_blanks_columns.map(&:to_s)
+        columns_to_nilify -= options[:except] if options[:except]
+
+        self.nilify_blanks_columns = columns_to_nilify.map(&:to_s)
 
         send("before_#{options[:before]}", :nilify_blanks)
       end
