@@ -10,6 +10,7 @@ module NilifyBlanks
 
   module ClassMethods
     DEFAULT_TYPES = [:string, :text, :citext]
+    DEFAULT_CALLBACK = :validation
 
     @@define_nilify_blank_methods_lock = Mutex.new
 
@@ -39,6 +40,8 @@ module NilifyBlanks
 
       @@define_nilify_blank_methods_lock.synchronize do
         options = nilify_blanks_options.dup
+
+        options[:before] ||= DEFAULT_CALLBACK
         options[:only] = Array.wrap(options[:only]).map(&:to_s) if options[:only]
         options[:except] = Array.wrap(options[:except]).map(&:to_s) if options[:except]
         options[:types] = options[:types] ? Array.wrap(options[:types]).map(&:to_sym) : DEFAULT_TYPES
@@ -54,7 +57,6 @@ module NilifyBlanks
         self.nilify_blanks_columns -= options[:except] if options[:except]
         self.nilify_blanks_columns = self.nilify_blanks_columns.map(&:to_s)
 
-        options[:before] ||= :save
         send("before_#{options[:before]}", :nilify_blanks)
       end
     end

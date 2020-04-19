@@ -57,7 +57,7 @@ Or perhaps just a model namespace base class:
 
 == Specifying a Callback
 
-Checking uses an ActiveRecord before_save filter by default, but you can specify a different filter with the :before option.  Any filter will work - just first remove the "before_" prefix from the name.
+Checking uses an ActiveRecord before_validation callback by default, but you can specify a different callback with the :before option.  Any callback will work - just first remove the "before_" prefix from the name.
 
   class Post < ActiveRecord::Base
     nilify_blanks before: :create
