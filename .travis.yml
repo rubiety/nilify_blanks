@@ -18,11 +18,10 @@ matrix:
       rvm: 2.4.5
 
 before_install:
-  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
   - gem install bundler -v '< 2'
   - "rm gemfiles/*.lock"
 
-before_script:
-  - "bundle install"
+install:
+  - bundle _1.17.3_ install --retry=3 --jobs=3
 
 script: "bundle exec rake clean test"
