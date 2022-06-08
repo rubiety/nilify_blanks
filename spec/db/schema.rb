@@ -11,6 +11,7 @@ end
 
 ActiveRecord::Schema.define(:version => 0) do
   if postgresql?
+    enable_extension "hstore"
     enable_extension 'citext'
   end
 
@@ -24,5 +25,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer :views
     t.integer :category_id
     t.string :blog_id
+    t.string :tags, array: true if postgresql?
+    t.hstore :metadata if postgresql?
+    t.hstore :objects, array: true if postgresql?
   end
 end

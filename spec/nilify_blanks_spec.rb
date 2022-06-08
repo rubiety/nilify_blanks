@@ -7,12 +7,36 @@ RSpec.describe NilifyBlanks do
         nilify_blanks
       end
 
-      @post = Post.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0, :blog_id => '')
+      @post = Post.new(
+        :first_name => '',
+        :last_name => '',
+        :title => '',
+        :summary => '',
+        :body => '',
+        :slug => '',
+        :views => 0,
+        :blog_id => '',
+      )
+
+      def postgresql?
+        ENV["DB"] == "postgresql"
+      end
+
+      if postgresql?
+        @post.tags     = ["", nil]
+        @post.metadata = { "foo" => "", "bar" => nil }
+        @post.objects  = [{}, nil, { "foo" => "", "bar" => nil }]
+      end
+
       @post.save
     end
 
-    it "should recognize all non-null string, text, citext columns" do
-      expect(Post.nilify_blanks_columns).to eq(['first_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
+    it "should recognize all non-null string, text, citext, array, hstore columns" do
+      if postgresql?
+        expect(Post.nilify_blanks_columns).to eq(['first_name', 'title', 'summary', 'body', 'slug', 'blog_id', 'tags', 'metadata', 'objects'])
+      else
+        expect(Post.nilify_blanks_columns).to eq(['first_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
+      end
     end
 
     it "should convert all blanks to nils" do
@@ -22,6 +46,9 @@ RSpec.describe NilifyBlanks do
       expect(@post.body).to be_nil
       expect(@post.slug).to be_nil
       expect(@post.blog_id).to be_nil
+      expect(@post.tags).to be_nil if postgresql?
+      expect(@post.metadata).to be_nil if postgresql?
+      expect(@post.objects).to be_nil if postgresql?
     end
 
     it "should leave not-null last name field alone" do
@@ -44,11 +71,34 @@ RSpec.describe NilifyBlanks do
         nilify_blanks :nullables_only => false
       end
 
-      @post = PostWithNullables.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0, :blog_id => '')
+      @post = PostWithNullables.new(
+        :first_name => '',
+        :last_name => '',
+        :title => '',
+        :summary => '',
+        :body => '',
+        :slug => '',
+        :views => 0,
+        :blog_id => '',
+      )
+
+      def postgresql?
+        ENV["DB"] == "postgresql"
+      end
+
+      if postgresql?
+        @post.tags     = ["", nil]
+        @post.metadata = { "foo" => "", "bar" => nil }
+        @post.objects  = [{}, nil, { "foo" => "", "bar" => nil }]
+      end
     end
 
-    it "should recognize all (even null) string, text, citext columns" do
-      expect(PostWithNullables.nilify_blanks_columns).to eq(['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
+    it "should recognize all (even null) string, text, citext, array, hstore columns" do
+      if postgresql?
+        expect(PostWithNullables.nilify_blanks_columns).to eq(['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id', 'tags', 'metadata', 'objects'])
+      else
+        expect(PostWithNullables.nilify_blanks_columns).to eq(['first_name', 'last_name', 'title', 'summary', 'body', 'slug', 'blog_id'])
+      end
     end
   end
 
@@ -122,17 +172,35 @@ RSpec.describe NilifyBlanks do
       end
 
       @post = PostExceptFirstNameAndTitle.new(:first_name => '', :last_name => '', :title => '', :summary => '', :body => '', :slug => '', :views => 0)
+
+      def postgresql?
+        ENV["DB"] == "postgresql"
+      end
+
+      if postgresql?
+        @post.tags     = ["", nil]
+        @post.metadata = { "foo" => "", "bar" => nil }
+        @post.objects  = [{}, nil, { "foo" => "", "bar" => nil }]
+      end
+
       @post.save
     end
 
-    it "should recognize only summary, body, and views" do
-      expect(PostExceptFirstNameAndTitle.nilify_blanks_columns).to eq(['summary', 'body', 'slug'])
+    it "should recognize only summary, body, views, tags, metadata and objects" do
+      if postgresql?
+        expect(PostExceptFirstNameAndTitle.nilify_blanks_columns).to eq(['summary', 'body', 'slug', 'tags', 'metadata', 'objects'])
+      else
+        expect(PostExceptFirstNameAndTitle.nilify_blanks_columns).to eq(['summary', 'body', 'slug'])
+      end
     end
 
-    it "should convert summary and body blanks to nils" do
+    it "should convert summary, body, tags and metadata blanks to nils" do
       expect(@post.summary).to be_nil
       expect(@post.body).to be_nil
       expect(@post.slug).to be_nil
+      expect(@post.tags).to be_nil if postgresql?
+      expect(@post.metadata).to be_nil if postgresql?
+      expect(@post.objects).to be_nil if postgresql?
     end
 
     it "should leave other fields alone" do
@@ -234,6 +302,10 @@ RSpec.describe NilifyBlanks do
         class Post < ActiveRecord::Base
           nilify_blanks
         end
+
+        def postgresql?
+          ENV["DB"] == "postgresql"
+        end
       end
 
       it { is_expected.to nilify_blanks_for(:first_name) }
@@ -242,6 +314,9 @@ RSpec.describe NilifyBlanks do
       it { is_expected.to nilify_blanks_for(:body) }
       it { is_expected.to nilify_blanks_for(:slug) }
       it { is_expected.to nilify_blanks_for(:blog_id) }
+      it { is_expected.to nilify_blanks_for(:tags) } if postgresql?
+      it { is_expected.to nilify_blanks_for(:metadata) } if postgresql?
+      it { is_expected.to nilify_blanks_for(:objects) } if postgresql?
 
       it { is_expected.to_not nilify_blanks_for(:id) }
       it { is_expected.to_not nilify_blanks_for(:last_name) }
