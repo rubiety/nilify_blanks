@@ -22,5 +22,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rake", "~> 13.0.1")
   s.add_development_dependency("rspec", [">= 3.8.0"])
   s.add_development_dependency("appraisal", [">= 1.0.2"])
-  s.add_development_dependency("sqlite3", [">= 1.3.6"])
 end

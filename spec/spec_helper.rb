@@ -5,9 +5,17 @@ require "active_record"
 require "yaml"
 
 # Establish DB Connection
-config = YAML::load(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml')))
+config = YAML::load(ERB.new(IO.read(File.join(File.dirname(__FILE__), 'db', 'database.yml.erb'))).result)
 ActiveRecord::Base.configurations = {'test' => config[ENV['DB'] || 'sqlite3']}
-ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
+
+test_config =
+  if ActiveRecord::VERSION::MAJOR == 7
+    ActiveRecord::Base.configurations.find_db_config('test')
+  else
+    ActiveRecord::Base.configurations['test']
+  end
+
+ActiveRecord::Base.establish_connection(test_config)
 
 # Load Test Schema into the Database
 load(File.dirname(__FILE__) + "/db/schema.rb")

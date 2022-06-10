@@ -8,8 +8,8 @@ sqlite3:
 
 postgresql:
   adapter: postgresql
-  username: postgres
-  password: postgres
+  username: <%= ENV["USER"] %>
+  password: <%= ENV["USER"] %>
   database: nilify_blanks_plugin_test
   min_messages: ERROR
 

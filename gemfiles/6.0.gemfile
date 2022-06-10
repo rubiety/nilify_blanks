@@ -4,7 +4,8 @@ source "http://rubygems.org"
 
 gem "rubysl", "~> 2.0", platforms: [:rbx]
 gem "activerecord-jdbcsqlite3-adapter", platforms: [:jruby]
-gem "sqlite3", "~> 1.4.2", platforms: [:ruby]
 gem "rails", "~> 6.0.2"
+gem "sqlite3", "~> 1.4"
+gem "pg", "~> 0.11"
 
 gemspec path: "../"
