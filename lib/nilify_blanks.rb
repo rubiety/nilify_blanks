@@ -9,7 +9,7 @@ module NilifyBlanks
   end
 
   module ClassMethods
-    DEFAULT_TYPES = [:string, :text, :citext]
+    DEFAULT_TYPES = [:string, :text, :citext, :hstore]
     DEFAULT_CALLBACK = :validation
 
     @@define_nilify_blank_methods_lock = Mutex.new
@@ -66,12 +66,90 @@ module NilifyBlanks
   def nilify_blanks
     (nilify_blanks_columns || []).each do |column|
       value = read_attribute(column)
-      next unless value.is_a?(String)
+
+      next unless [String, Array, Hash].include?(value.class)
       next unless value.respond_to?(:blank?)
 
-      write_attribute(column, nil) if value.blank?
+      write_attribute(column, nilify(value)) if nilifiable? value
     end
   end
+
+  private
+    def nilify(value)
+      return value unless nilifiable? value
+
+      case value
+      when String
+        nilify_string(value)
+      when Array
+        nilify_array(value)
+      when Hash
+        nilify_hash(value)
+      else
+        value
+      end
+    end
+
+    def nilify_string(string)
+      nil
+    end
+
+    def nilify_array(array)
+      return nil if array.empty?
+
+      nilified_array = array.map do |element|
+        nilify element
+      end.reject(&:blank?)
+
+      nilified_array.empty? ? nil : nilified_array
+    end
+
+    def nilify_hash(hash)
+      return nil if hash.empty?
+
+      nilified_hash = hash.transform_values do |value|
+        nilify value
+      end.reject do |_key, value|
+        value.blank?
+      end
+
+      nilified_hash.empty? ? nil : nilified_hash
+    end
+
+    def nilifiable?(value)
+      case value
+      when String
+        nilifiable_string?(value)
+      when Array
+        nilifiable_array?(value)
+      when Hash
+        nilifiable_hash?(value)
+      when NilClass
+        true
+      else
+        false
+      end
+    end
+
+    def nilifiable_string?(string)
+      string.blank?
+    end
+
+    def nilifiable_array?(array)
+      return true if array.empty?
+
+      array.any? do |element|
+        nilifiable? element
+      end
+    end
+
+    def nilifiable_hash?(hash)
+      return true if hash.empty?
+
+      hash.any? do |_key, value|
+        nilifiable? value
+      end
+    end
 end
 
 require "nilify_blanks/railtie"
